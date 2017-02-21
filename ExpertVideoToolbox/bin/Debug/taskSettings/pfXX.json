@@ -1,1 +1,0 @@
-{"name":"pfXX","encoder":"x264_64-8bit.exe","outputFormat":"mp4","encoderSetting":"--crf 20.5 --bframes 8 --b-adapt 2 --ref 8 --aq-mode 4 --aq-strength 1.3 --merange 26 --me tesa --subme 10 --partitions all --trellis 2 --psy-rd 0.7:0 --deblock 0:0","audioEncoder":"qaac","audioProfile":"LC-AAC","audioCodecMode":"TVBR","audioQuality":"91","audioKbps":"91"}

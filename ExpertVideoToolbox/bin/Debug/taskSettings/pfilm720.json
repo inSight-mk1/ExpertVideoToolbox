@@ -1,1 +1,0 @@
-{"name":"pfilm720","encoder":"x264_64-8bit.exe","outputFormat":"mp4","encoderSetting":"--crf 20 --bframes 7 --b-adapt 2 --ref 4 --aq-mode 1 --aq-strength 0.7 --merange 32 --me tesa --subme 10 --partitions all --trellis 2 --psy-rd 0.7:0 --deblock 0:0 --vf resize:1280,720,,,,lanczos","audioEncoder":"复制音频流","audioProfile":"","audioCodecMode":"","audioQuality":"","audioKbps":""}

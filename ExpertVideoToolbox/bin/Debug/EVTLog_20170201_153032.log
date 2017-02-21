@@ -1,0 +1,139 @@
+﻿Microsoft Windows [版本 10.0.14393]
+(c) 2016 Microsoft Corporation。保留所有权利。
+F:\pm851\Coding\Windows\ExpertVideoToolbox\ExpertVideoToolbox\bin\Debug>"F:\pm851\Coding\Windows\ExpertVideoToolbox\ExpertVideoToolbox\bin\Debug\tools\ffmpeg\ffmpeg.exe" -i "F:\Users\fdwsWTG\Desktop\Trans\H1Z1  King of the Kill 12.22.2016 - 00.18.26.01.mp4" -vn -sn -async 1 -c:a copy -y -map 0:a:0 "F:\Users\fdwsWTG\Desktop\Trans\H1Z1  King of the Kill 12.22.2016 - 00.18.26.01_audioTemp.AAC"
+ffmpeg version N-74836-g4e4a395 Copyright (c) 2000-2015 the FFmpeg developers
+  built with gcc 5.2.0 (GCC)
+  configuration: --prefix=/mingw/i686-w64-mingw32 --target-os=mingw32 --arch=x86 --cpu=i686 --enable-gpl --enable-version3 --enable-runtime-cpudetect --enable-memalign-hack --enable-avisynth --enable-w32threads --enable-libwebp --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libopencore-amrnb --enable-libopencore-amrwb --enable-libvo-aacenc --enable-libfaac --enable-libfdk-aac --enable-libvo-amrwbenc --enable-libvpx --enable-libx264 --enable-libx265 --enable-libopenh264 --enable-libxvid --disable-doc --disable-debug --enable-nonfree --extra-ldflags=-static --extra-cflags='-march=i686 -mtune=generic -mfpmath=sse -msse2 -fno-strict-aliasing'
+  libavutil      54. 31.100 / 54. 31.100
+  libavcodec     56. 60.100 / 56. 60.100
+  libavformat    56. 40.101 / 56. 40.101
+  libavdevice    56.  4.100 / 56.  4.100
+  libavfilter     5. 40.101 /  5. 40.101
+  libswscale      3.  1.101 /  3.  1.101
+  libswresample   1.  2.101 /  1.  2.101
+  libpostproc    53.  3.100 / 53.  3.100
+Input #0, mov,mp4,m4a,3gp,3g2,mj2, from 'F:\Users\fdwsWTG\Desktop\Trans\H1Z1  King of the Kill 12.22.2016 - 00.18.26.01.mp4':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp41isom
+    creation_time   : 2016-12-21 16:18:26
+    date            : 2016
+  Duration: 00:02:17.00, start: 0.000000, bitrate: 46066 kb/s
+    Stream #0:0(und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, smpte170m/smpte170m/bt470m), 1920x1080 [SAR 1:1 DAR 16:9], 45860 kb/s, 59.23 fps, 59.94 tbr, 60k tbn, 120 tbc (default)
+    Metadata:
+      creation_time   : 2016-12-21 16:18:26
+      handler_name    : VideoHandler
+      encoder         : AVC Coding
+    Stream #0:1(und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 196 kb/s (default)
+    Metadata:
+      creation_time   : 2016-12-21 16:18:26
+      handler_name    : SoundHandler
+Output #0, adts, to 'F:\Users\fdwsWTG\Desktop\Trans\H1Z1  King of the Kill 12.22.2016 - 00.18.26.01_audioTemp.AAC':
+  Metadata:
+    major_brand     : mp42
+    minor_version   : 0
+    compatible_brands: mp41isom
+    date            : 2016
+    encoder         : Lavf56.40.101
+    Stream #0:0(und): Audio: aac (mp4a / 0x6134706D), 48000 Hz, stereo, 196 kb/s (default)
+    Metadata:
+      creation_time   : 2016-12-21 16:18:26
+      handler_name    : SoundHandler
+Stream mapping:
+  Stream #0:1 -> #0:0 (copy)
+Press [q] to stop, [?] for help
+size=    3326kB time=00:02:16.87 bitrate= 199.1kbits/s    
+video:0kB audio:3282kB subtitle:0kB other streams:0kB global headers:0kB muxing overhead: 1.336328%
+F:\pm851\Coding\Windows\ExpertVideoToolbox\ExpertVideoToolbox\bin\Debug>"F:\pm851\Coding\Windows\ExpertVideoToolbox\ExpertVideoToolbox\bin\Debug\tools\x26x\x264_64-10bit.exe" --preset veryslow --crf 19 --ref 13 --bframes 12 --b-adapt 2 --b-pyramid normal --qcomp 0.50 --merange 24 --subme 10 --psy-rd 0.0:0 --no-dct-decimate --aq-mode 4 --aq-strength 1.3 --min-keyint 1 -o "F:\Users\fdwsWTG\Desktop\Trans\H1Z1  King of the Kill 12.22.2016 - 00.18.26.01_temp.mp4" "F:\Users\fdwsWTG\Desktop\Trans\H1Z1  King of the Kill 12.22.2016 - 00.18.26.01.mp4"
+[info]: indexing input file [0.2%]  
+[info]: indexing input file [9.6%]  
+[info]: indexing input file [18.2%] 
+[info]: indexing input file [26.4%] 
+[info]: indexing input file [34.6%] 
+[info]: indexing input file [42.7%] 
+[info]: indexing input file [49.8%] 
+[info]: indexing input file [57.6%] 
+[info]: indexing input file [66.4%] 
+[info]: indexing input file [75.2%] 
+[info]: indexing input file [84.1%] 
+[info]: indexing input file [93.4%] 
+                                    
+ffms [info]: 
+ Format    : mov,mp4,m4a,3gp,3g2,mj2
+ Codec     : h264
+ PixFmt    : yuv420p
+ Framerate : 500000/8441
+ Timebase  : 1000/60000000
+ Duration  : 0:02:16
+ffms [info]: 1920x1080p 1:1 @ 500000/8441 fps (vfr)
+ffms [info]: color matrix: smpte170m
+x264 [info]: using SAR=1/1
+x264 [info]: using cpu capabilities: MMX2 SSE2Fast SSSE3 SSE4.2 AVX FMA3 AVX2 LZCNT BMI2
+x264 [info]: AVC Encoder x264 core 148 r2744+45 a477af1 7mod [10-bit@all X86_64]
+x264 [info]: profile: High 10, level: 5.0, subsampling: 4:2:0, bit-depth: 10-bit
+x264 [info]: cabac=1 ref=13 deblock=1:0:0 analyse=0x3:0x133 me=umh subme=10 psy=1 fade_compensate=0.00 psy_rd=0.00:0.00 mixed_ref=1 me_range=24 chroma_me=1 trellis=2 8x8dct=1 cqm=0 deadzone=21,11 fast_pskip=1 chroma_qp_offset=0 threads=12 lookahead_threads=3 sliced_threads=0 nr=0 decimate=0 interlaced=0 bluray_compat=0 constrained_intra=0 fgo=0 bframes=12 b_pyramid=2 b_adapt=2 b_bias=0 direct=3 weightb=1 open_gop=0 weightp=2 keyint=250 keyint_min=1 scenecut=40 intra_refresh=0 rc_lookahead=60 rc=crf mbtree=1 crf=19.0000 qcomp=0.50 qpmin=0:0:0 qpmax=81:81:81 qpstep=4 ip_ratio=1.40 aq=4:1.30 aq-sensitivity=10.00 aq-factor=1.00:1.00:1.00 aq2=0 aq3=0
+x264 [info]: started at Wed Feb 01 15:29:31 2017
+[0.0%] 1/8115 frames, 0.160 fps, 169538 kb/s, 349.38 KB, eta 14:02:54, est.size 2768.8 MB       
+[0.0%] 4/8115 frames, 0.611 fps, 52250 kb/s, 414.68 KB, eta 3:41:11, est.size 821.57 MB       
+[0.1%] 7/8115 frames, 1.013 fps, 32693 kb/s, 461.21 KB, eta 2:13:21, est.size 522.15 MB       
+[0.1%] 9/8115 frames, 1.256 fps, 28620 kb/s, 529.63 KB, eta 1:47:33, est.size 466.36 MB       
+[0.1%] 11/8115 frames, 1.478 fps, 26412 kb/s, 593.72 KB, eta 1:31:21, est.size 427.74 MB       
+[0.2%] 13/8115 frames, 1.679 fps, 24360 kb/s, 642.75 KB, eta 1:20:24, est.size 391.82 MB       
+[0.2%] 15/8115 frames, 1.796 fps, 23536 kb/s, 724.45 KB, eta 1:15:09, est.size 382.74 MB       
+[0.2%] 17/8115 frames, 1.889 fps, 22498 kb/s, 781.93 KB, eta 1:11:26, est.size 364.51 MB       
+[0.2%] 20/8115 frames, 2.129 fps, 20824 kb/s, 850.88 KB, eta 1:03:23, est.size 337.15 MB       
+[0.3%] 24/8115 frames, 2.467 fps, 18801 kb/s, 925.61 KB, eta 0:54:40, est.size 305.64 MB       
+[0.3%] 27/8115 frames, 2.676 fps, 17923 kb/s, 995.10 KB, eta 0:50:21, est.size 292.07 MB       
+[0.4%] 30/8115 frames, 2.066 fps, 19605 kb/s, 1.18 MB, eta 1:05:12, est.size 318.85 MB       
+[0.4%] 31/8115 frames, 2.017 fps, 21596 kb/s, 1.34 MB, eta 1:06:47, est.size 350.04 MB       
+[0.4%] 34/8115 frames, 2.107 fps, 21722 kb/s, 1.47 MB, eta 1:03:55, est.size 351.93 MB       
+[0.6%] 45/8115 frames, 2.480 fps, 23236 kb/s, 2.09 MB, eta 0:54:14, est.size 377.43 MB       
+[0.6%] 46/8115 frames, 2.462 fps, 23270 kb/s, 2.14 MB, eta 0:54:37, est.size 377.10 MB       
+[0.6%] 47/8115 frames, 2.449 fps, 22746 kb/s, 2.14 MB, eta 0:54:54, est.size 369.21 MB       
+[0.6%] 48/8115 frames, 2.132 fps, 23889 kb/s, 2.30 MB, eta 1:03:02, est.size 388.37 MB       
+[0.6%] 49/8115 frames, 2.149 fps, 24099 kb/s, 2.36 MB, eta 1:02:32, est.size 390.68 MB       
+[0.7%] 54/8115 frames, 2.132 fps, 23285 kb/s, 2.52 MB, eta 1:03:01, est.size 378.02 MB       
+[0.7%] 55/8115 frames, 2.091 fps, 23682 kb/s, 2.60 MB, eta 1:04:15, est.size 383.76 MB       
+[0.7%] 56/8115 frames, 2.107 fps, 23474 kb/s, 2.63 MB, eta 1:03:44, est.size 381.25 MB       
+[0.7%] 58/8115 frames, 2.130 fps, 23651 kb/s, 2.74 MB, eta 1:03:02, est.size 383.32 MB       
+[0.7%] 59/8115 frames, 2.077 fps, 23888 kb/s, 2.82 MB, eta 1:04:38, est.size 387.69 MB       
+[0.8%] 63/8115 frames, 1.892 fps, 24084 kb/s, 3.03 MB, eta 1:10:56, est.size 390.91 MB       
+[0.8%] 64/8115 frames, 1.899 fps, 24623 kb/s, 3.15 MB, eta 1:10:40, est.size 399.02 MB       
+[0.8%] 66/8115 frames, 1.937 fps, 24210 kb/s, 3.20 MB, eta 1:09:16, est.size 393.03 MB       
+[0.8%] 68/8115 frames, 1.974 fps, 24916 kb/s, 3.39 MB, eta 1:07:56, est.size 404.69 MB       
+[0.9%] 71/8115 frames, 2.038 fps, 24635 kb/s, 3.50 MB, eta 1:05:46, est.size 400.03 MB       
+[0.9%] 72/8115 frames, 2.051 fps, 24592 kb/s, 3.54 MB, eta 1:05:21, est.size 399.40 MB       
+[0.9%] 75/8115 frames, 2.056 fps, 24169 kb/s, 3.63 MB, eta 1:05:10, est.size 392.73 MB       
+[0.9%] 77/8115 frames, 1.933 fps, 24326 kb/s, 3.75 MB, eta 1:09:17, est.size 395.43 MB       
+[1.0%] 78/8115 frames, 1.943 fps, 24426 kb/s, 3.82 MB, eta 1:08:57, est.size 396.97 MB       
+[1.0%] 81/8115 frames, 2.002 fps, 23768 kb/s, 3.85 MB, eta 1:06:53, est.size 386.15 MB       
+[1.0%] 83/8115 frames, 2.024 fps, 23922 kb/s, 3.98 MB, eta 1:06:08, est.size 388.80 MB       
+[1.0%] 84/8115 frames, 2.033 fps, 24146 kb/s, 4.06 MB, eta 1:05:50, est.size 392.62 MB       
+[1.0%] 85/8115 frames, 2.039 fps, 24267 kb/s, 4.13 MB, eta 1:05:38, est.size 393.95 MB       
+[1.1%] 88/8115 frames, 2.079 fps, 24172 kb/s, 4.26 MB, eta 1:04:21, est.size 392.79 MB       
+[1.1%] 90/8115 frames, 2.069 fps, 23874 kb/s, 4.31 MB, eta 1:04:37, est.size 388.20 MB       
+[1.3%] 102/8115 frames, 2.326 fps, 23344 kb/s, 4.77 MB, eta 0:57:24, est.size 379.57 MB       
+[1.3%] 103/8115 frames, 2.321 fps, 23198 kb/s, 4.79 MB, eta 0:57:32, est.size 377.01 MB       
+[1.3%] 105/8115 frames, 2.323 fps, 23056 kb/s, 4.85 MB, eta 0:57:28, est.size 375.13 MB       
+[1.3%] 108/8115 frames, 2.374 fps, 22658 kb/s, 4.91 MB, eta 0:56:12, est.size 368.76 MB       
+[1.3%] 109/8115 frames, 2.368 fps, 22719 kb/s, 4.96 MB, eta 0:56:20, est.size 369.29 MB       
+[1.4%] 110/8115 frames, 2.374 fps, 22644 kb/s, 5.00 MB, eta 0:56:11, est.size 368.50 MB       
+[1.4%] 112/8115 frames, 2.373 fps, 22470 kb/s, 5.04 MB, eta 0:56:12, est.size 365.28 MB       
+[1.4%] 114/8115 frames, 2.351 fps, 22504 kb/s, 5.15 MB, eta 0:56:42, est.size 366.43 MB       
+[1.4%] 117/8115 frames, 2.399 fps, 22240 kb/s, 5.22 MB, eta 0:55:33, est.size 362.04 MB       
+[1.5%] 120/8115 frames, 2.433 fps, 22251 kb/s, 5.36 MB, eta 0:54:45, est.size 362.14 MB       
+[1.5%] 123/8115 frames, 2.476 fps, 22215 kb/s, 5.48 MB, eta 0:53:48, est.size 361.48 MB       
+[1.5%] 125/8115 frames, 2.502 fps, 21963 kb/s, 5.50 MB, eta 0:53:13, est.size 357.30 MB       
+[1.6%] 127/8115 frames, 2.469 fps, 22024 kb/s, 5.60 MB, eta 0:53:54, est.size 358.05 MB       
+[1.6%] 131/8115 frames, 2.505 fps, 21836 kb/s, 5.74 MB, eta 0:53:06, est.size 355.46 MB       
+[1.7%] 135/8115 frames, 2.566 fps, 21356 kb/s, 5.79 MB, eta 0:51:49, est.size 347.89 MB       
+[1.7%] 138/8115 frames, 2.609 fps, 21555 kb/s, 5.97 MB, eta 0:50:57, est.size 351.21 MB       
+[1.7%] 139/8115 frames, 2.597 fps, 21503 kb/s, 6.00 MB, eta 0:51:11, est.size 350.23 MB       
+[1.7%] 142/8115 frames, 2.606 fps, 21415 kb/s, 6.10 MB, eta 0:50:59, est.size 348.81 MB       
+[1.8%] 146/8115 frames, 2.636 fps, 21279 kb/s, 6.24 MB, eta 0:50:22, est.size 346.80 MB       
+[1.8%] 150/8115 frames, 2.657 fps, 21191 kb/s, 6.39 MB, eta 0:49:57, est.size 345.47 MB       
+[1.9%] 154/8115 frames, 2.702 fps, 21093 kb/s, 6.52 MB, eta 0:49:06, est.size 343.74 MB       
+[1.9%] 158/8115 frames, 2.730 fps, 20915 kb/s, 6.64 MB, eta 0:48:34, est.size 341.13 MB       
+[2.0%] 162/8115 frames, 2.651 fps, 20915 kb/s, 6.81 MB, eta 0:49:59, est.size 341.07 MB       
+[2.0%] 164/8115 frames, 2.669 fps, 20770 kb/s, 6.84 MB, eta 0:49:39, est.size 338.62 MB       

@@ -1,0 +1,1 @@
+{"name":"LOL","encoder":"x264_64-8bit.exe","outputFormat":"mp4","encoderSetting":"--crf 22 --bframes 7 --b-adapt 2 --ref 4 --qcomp 0.5 --psy-rd 0.0:0 --aq-strength 1.3 --aq-mode 2 --me umh --merange 32 --subme 10 --partitions all --trellis 2   --deblock 0:0","audioEncoder":"复制音频流","audioProfile":"","audioCodecMode":"","audioQuality":"","audioKbps":""}

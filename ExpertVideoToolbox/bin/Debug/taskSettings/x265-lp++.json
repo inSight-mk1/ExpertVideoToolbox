@@ -1,0 +1,1 @@
+{"name":"x265-lp++","encoder":"x265-10bit.exe","outputFormat":"mkv","encoderSetting":"--tune lp++","audioEncoder":"复制音频流","audioProfile":"","audioCodecMode":"","audioQuality":"91","audioKbps":"91"}

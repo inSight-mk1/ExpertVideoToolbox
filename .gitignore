@@ -53,3 +53,4 @@ obj/
 x86/
 x64/
 bin/
+packages/

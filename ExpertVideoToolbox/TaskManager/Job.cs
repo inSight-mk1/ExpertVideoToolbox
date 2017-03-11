@@ -16,8 +16,8 @@ namespace ExpertVideoToolbox.taskManager
 {
     class Job
     {
-        public delegate void ErrorHandler();           //声明委托
-        public event ErrorHandler ErrorEvent;          //声明事件
+        public delegate void ErrorHandler();          //声明委托
+        public event ErrorHandler ErrorEvent;         //声明事件
 
         delegate void InnerMethodDelagate();           
         

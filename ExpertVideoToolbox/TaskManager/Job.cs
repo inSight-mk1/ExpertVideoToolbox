@@ -325,7 +325,7 @@ namespace ExpertVideoToolbox.taskManager
                     }
                     catch (Exception e)
                     {
-                        if (ConfirmFailed())
+                        if (this.encoding == true || ConfirmFailed())
                         {
                             afterFailed();
                         }                       
@@ -445,7 +445,9 @@ namespace ExpertVideoToolbox.taskManager
                     {
                         return;
                     }                
-                    afterSuccess();
+                    //afterSuccess();
+                    
+                    Mux();
 
                     break;
                 case COPYAUDIO:

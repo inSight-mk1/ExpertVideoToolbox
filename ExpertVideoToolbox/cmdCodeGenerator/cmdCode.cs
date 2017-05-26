@@ -101,22 +101,16 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
             {
                 this.outputFolderPath = getPureFolderName(fp);
             }
+ 
             string outputFilePath = this.outputFolderPath + getPureFileName(fp) + "_" + this.ts.name + "." + ts.outputFormat;
-            string videoTempPath = this.outputFolderPath + getPureFileName(fp) + "_temp" + ".mp4";
+            string videoTempPath = this.outputFolderPath + ts.name + "_temp" + ".mp4";
             string mp4BoxTempPath = this.outputFolderPath.Substring(0, this.outputFolderPath.Length - 1);  // tmp路径末尾不能有斜杠，否则parse出错（坑爹的gpac）
             string audioTempPath = this.outputFolderPath + getPureFileName(fp) + "_audioTemp." + this.outputAudioFormat;
 
             switch (mode)
             {               
                 case VIDEOENCODE:      
-                    if (this.taskType() == ONLYVIDEO)
-                    {
-                        code = "\"" + x264Path + "\"" + " " + ts.encoderSetting + " -o " + "\"" + outputFilePath + "\"" + " " + "\"" + fp + "\"";
-                    } else
-                    {
-                        code = "\"" + x264Path + "\"" + " " + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " " + "\"" + fp + "\"";
-                    }
-                    
+                    code = "\"" + x264Path + "\"" + " " + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " " + "\"" + fp + "\"";
                     break;
                 case AUDIOCOPY:
                     code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -vn -sn -async 1 -c:a copy -y -map 0:a:0 " + "\"" + audioTempPath + "\"";                    
@@ -124,15 +118,32 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
                 case MUXER:
                     if (String.Equals(ts.outputFormat, "mp4", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        code = "\"" + mp4BoxPath + "\"" + " -add " + "\"" + videoTempPath + "\"" +
-                        " -add " + "\"" + audioTempPath + "\"" + " " + "\"" + outputFilePath + "\"" + " -tmp " + "\"" + mp4BoxTempPath + "\"";
+                        if (this.taskType() == ONLYVIDEO)
+                        {
+                            code = "\"" + mp4BoxPath + "\"" + " -add " + "\"" + videoTempPath + "\"" +
+                                      " " + "\"" + outputFilePath + "\"" + " -tmp " + "\"" + mp4BoxTempPath + "\"";
+                        }
+                        else
+                        {
+                            code = "\"" + mp4BoxPath + "\"" + " -add " + "\"" + videoTempPath + "\"" +
+                                " -add " + "\"" + audioTempPath + "\"" + " " + "\"" + outputFilePath + "\"" + " -tmp " + "\"" + mp4BoxTempPath + "\"";
+                        }
+                        
                         // tmp文件夹设定在输出位置，不设置的话默认C盘，当C盘空间不足以存放一个视频压制后的.mp4文件时任务就会失败
                         // 上述的问题解决了，暂时不考虑其他的mp4混流器了，mp4Box自用近两年从未crash，稳定性还是有保障的
                     }
                     else if (String.Equals(ts.outputFormat, "mkv", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        code += "\"" + mkvmergePath + "\"" + " -o " + "\"" + outputFilePath + "\"" + " " + "\"" + videoTempPath +
-                        "\"" + " " + "\"" + audioTempPath + "\"";
+                        if (this.taskType() == ONLYVIDEO)
+                        {
+                            code += "\"" + mkvmergePath + "\"" + " -o " + "\"" + outputFilePath + "\"" + " " + "\"" + videoTempPath +
+                                    "\"";
+                        }
+                        else
+                        {
+                            code += "\"" + mkvmergePath + "\"" + " -o " + "\"" + outputFilePath + "\"" + " " + "\"" + videoTempPath +
+                                    "\"" + " " + "\"" + audioTempPath + "\"";
+                        }
                     }
                     
                     break;

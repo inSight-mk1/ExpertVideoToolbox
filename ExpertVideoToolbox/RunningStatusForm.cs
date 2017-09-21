@@ -97,6 +97,11 @@ namespace ExpertVideoToolbox
             this.estETADataTB.Text = eta;
         }
 
+        public void setEstKbps(string kbps)
+        {
+            this.estKbpsDataTB.Text = kbps;
+        }
+
         private void RunningStatusForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             if (process != null)

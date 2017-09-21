@@ -89,7 +89,7 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
 
             string qaacPath = System.Windows.Forms.Application.StartupPath + "\\tools\\qaac\\qaac.exe";
             string ffmpegPath = System.Windows.Forms.Application.StartupPath + "\\tools\\ffmpeg\\ffmpeg.exe";
-            string x264Path = System.Windows.Forms.Application.StartupPath + "\\tools\\x26x\\" + ts.encoder;
+            string x26xPath = System.Windows.Forms.Application.StartupPath + "\\tools\\x26x\\" + ts.encoder;
             string mp4BoxPath = System.Windows.Forms.Application.StartupPath + "\\tools\\mp4Box\\MP4Box.exe";
             //string lsmashRemuxerPath = System.Windows.Forms.Application.StartupPath + "\\tools\\L-Smash\\remuxer.exe";
             string mkvmergePath = System.Windows.Forms.Application.StartupPath + "\\tools\\mkvmerge\\mkvmerge.exe";
@@ -103,14 +103,24 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
             }
  
             string outputFilePath = this.outputFolderPath + getPureFileName(fp) + "_" + this.ts.name + "." + ts.outputFormat;
-            string videoTempPath = this.outputFolderPath + ts.name + "_temp" + ".mp4";
+            string videoTempExt = ts.encoder == "x265-10bit.exe" ? ".hevc" : ".264";
+            string videoTempPath = this.outputFolderPath + ts.name + "_temp" + videoTempExt;
             string mp4BoxTempPath = this.outputFolderPath.Substring(0, this.outputFolderPath.Length - 1);  // tmp路径末尾不能有斜杠，否则parse出错（坑爹的gpac）
             string audioTempPath = this.outputFolderPath + getPureFileName(fp) + "_audioTemp." + this.outputAudioFormat;
 
             switch (mode)
             {               
                 case VIDEOENCODE:      
-                    code = "\"" + x264Path + "\"" + " " + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " " + "\"" + fp + "\"";
+                    //code = "\"" + x26xPath + "\"" + " " + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " " + "\"" + fp + "\"";
+                    
+                    // Example: "C:\Program Files (x86)\MarukoToolbox\tools\ffmpeg.exe" -i "C:\Users\fdws\Desktop\Trans\2016-09-28-1537-10.flv" 
+                    // -strict -1 -f yuv4mpegpipe -an -   | "C:\Users\fdws\Downloads\x265-master\build\vc12-x86_64\Release\x265-10bit.exe" 
+                    // --y4m  -o "C:\Users\fdws\Desktop\Trans\Test_vtemp.hevc" -
+                    
+                    string y4m = ts.encoder == "x265-10bit.exe" ? " --y4m " : " --demuxer y4m ";
+                    code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -strict -1 -f yuv4mpegpipe -an -   | "
+                        + "\"" + x26xPath + "\"" + y4m + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " -";
+
                     break;
                 case AUDIOCOPY:
                     code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -vn -sn -async 1 -c:a copy -y -map 0:a:0 " + "\"" + audioTempPath + "\"";                    
@@ -130,7 +140,6 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
                         }
                         
                         // tmp文件夹设定在输出位置，不设置的话默认C盘，当C盘空间不足以存放一个视频压制后的.mp4文件时任务就会失败
-                        // 上述的问题解决了，暂时不考虑其他的mp4混流器了，mp4Box自用近两年从未crash，稳定性还是有保障的
                     }
                     else if (String.Equals(ts.outputFormat, "mkv", StringComparison.CurrentCultureIgnoreCase))
                     {

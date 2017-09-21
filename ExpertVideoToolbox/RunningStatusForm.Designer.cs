@@ -40,6 +40,8 @@
             this.fpsLabel = new System.Windows.Forms.Label();
             this.currentPostionDataTB = new System.Windows.Forms.TextBox();
             this.datagB = new System.Windows.Forms.GroupBox();
+            this.estKbpsDataTB = new System.Windows.Forms.TextBox();
+            this.estKbpsLabel = new System.Windows.Forms.Label();
             this.progressLabel = new System.Windows.Forms.Label();
             this.taskStepsLabel = new System.Windows.Forms.Label();
             this.fullSpeedBtn = new System.Windows.Forms.Button();
@@ -53,7 +55,7 @@
             // stopBtn
             // 
             this.stopBtn.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.stopBtn.Location = new System.Drawing.Point(12, 185);
+            this.stopBtn.Location = new System.Drawing.Point(12, 217);
             this.stopBtn.Name = "stopBtn";
             this.stopBtn.Size = new System.Drawing.Size(64, 23);
             this.stopBtn.TabIndex = 14;
@@ -66,7 +68,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel,
             this.filesCountLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 218);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 249);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(407, 22);
             this.statusStrip1.SizingGrip = false;
@@ -89,7 +91,7 @@
             // 
             this.progress.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progress.Location = new System.Drawing.Point(12, 151);
+            this.progress.Location = new System.Drawing.Point(12, 186);
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(377, 23);
             this.progress.TabIndex = 12;
@@ -165,6 +167,8 @@
             // 
             this.datagB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.datagB.Controls.Add(this.estKbpsDataTB);
+            this.datagB.Controls.Add(this.estKbpsLabel);
             this.datagB.Controls.Add(this.estETADataTB);
             this.datagB.Controls.Add(this.estETALabel);
             this.datagB.Controls.Add(this.currentPositionLabel);
@@ -173,15 +177,37 @@
             this.datagB.Controls.Add(this.currentPostionDataTB);
             this.datagB.Location = new System.Drawing.Point(12, 36);
             this.datagB.Name = "datagB";
-            this.datagB.Size = new System.Drawing.Size(383, 109);
+            this.datagB.Size = new System.Drawing.Size(383, 138);
             this.datagB.TabIndex = 11;
             this.datagB.TabStop = false;
+            // 
+            // estKbpsDataTB
+            // 
+            this.estKbpsDataTB.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.estKbpsDataTB.Font = new System.Drawing.Font("微软雅黑", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.estKbpsDataTB.Location = new System.Drawing.Point(94, 102);
+            this.estKbpsDataTB.Name = "estKbpsDataTB";
+            this.estKbpsDataTB.ReadOnly = true;
+            this.estKbpsDataTB.Size = new System.Drawing.Size(283, 25);
+            this.estKbpsDataTB.TabIndex = 23;
+            this.estKbpsDataTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // estKbpsLabel
+            // 
+            this.estKbpsLabel.AutoSize = true;
+            this.estKbpsLabel.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.estKbpsLabel.Location = new System.Drawing.Point(8, 107);
+            this.estKbpsLabel.Name = "estKbpsLabel";
+            this.estKbpsLabel.Size = new System.Drawing.Size(56, 17);
+            this.estKbpsLabel.TabIndex = 22;
+            this.estKbpsLabel.Text = "预计码率";
             // 
             // progressLabel
             // 
             this.progressLabel.Font = new System.Drawing.Font("Microsoft YaHei UI", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.progressLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.progressLabel.Location = new System.Drawing.Point(327, 186);
+            this.progressLabel.Location = new System.Drawing.Point(327, 218);
             this.progressLabel.Name = "progressLabel";
             this.progressLabel.Size = new System.Drawing.Size(62, 20);
             this.progressLabel.TabIndex = 15;
@@ -201,7 +227,7 @@
             // fullSpeedBtn
             // 
             this.fullSpeedBtn.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.fullSpeedBtn.Location = new System.Drawing.Point(230, 185);
+            this.fullSpeedBtn.Location = new System.Drawing.Point(230, 217);
             this.fullSpeedBtn.Name = "fullSpeedBtn";
             this.fullSpeedBtn.Size = new System.Drawing.Size(46, 23);
             this.fullSpeedBtn.TabIndex = 17;
@@ -213,7 +239,7 @@
             // lowSpeedBtn
             // 
             this.lowSpeedBtn.Font = new System.Drawing.Font("微软雅黑", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.lowSpeedBtn.Location = new System.Drawing.Point(274, 185);
+            this.lowSpeedBtn.Location = new System.Drawing.Point(274, 217);
             this.lowSpeedBtn.Name = "lowSpeedBtn";
             this.lowSpeedBtn.Size = new System.Drawing.Size(45, 23);
             this.lowSpeedBtn.TabIndex = 18;
@@ -225,7 +251,7 @@
             // 
             this.encoderPriority.AutoSize = true;
             this.encoderPriority.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.encoderPriority.Location = new System.Drawing.Point(82, 186);
+            this.encoderPriority.Location = new System.Drawing.Point(82, 218);
             this.encoderPriority.Name = "encoderPriority";
             this.encoderPriority.Size = new System.Drawing.Size(51, 20);
             this.encoderPriority.TabIndex = 19;
@@ -242,7 +268,7 @@
             "高于正常",
             "高",
             "实时"});
-            this.priorityCB.Location = new System.Drawing.Point(137, 186);
+            this.priorityCB.Location = new System.Drawing.Point(137, 218);
             this.priorityCB.Name = "priorityCB";
             this.priorityCB.Size = new System.Drawing.Size(79, 20);
             this.priorityCB.TabIndex = 20;
@@ -252,7 +278,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(407, 240);
+            this.ClientSize = new System.Drawing.Size(407, 271);
             this.Controls.Add(this.priorityCB);
             this.Controls.Add(this.encoderPriority);
             this.Controls.Add(this.lowSpeedBtn);
@@ -296,5 +322,7 @@
         private System.Windows.Forms.Button lowSpeedBtn;
         private System.Windows.Forms.Label encoderPriority;
         private System.Windows.Forms.ComboBox priorityCB;
+        private System.Windows.Forms.TextBox estKbpsDataTB;
+        private System.Windows.Forms.Label estKbpsLabel;
     }
 }

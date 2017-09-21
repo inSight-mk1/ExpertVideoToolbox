@@ -216,7 +216,7 @@ namespace ExpertVideoToolbox.taskManager
             int type = c.taskType();
             int checkNum = 0;
 
-            int beforeProcessCheckTime = 2000;
+            int beforeProcessCheckTime = 3500;
             int processCheckInterval = 1000;
             const int checkF = 20;
 
@@ -233,6 +233,7 @@ namespace ExpertVideoToolbox.taskManager
                 this.rsForm.setEta("");
                 this.rsForm.setFps("");
                 this.rsForm.setTime("");
+                this.rsForm.setEstKbps("");
                 this.rsForm.SetTaskStepsLabel(true);
 
                 Process p = Process.GetProcessById(this.PIDs[0]);
@@ -279,13 +280,34 @@ namespace ExpertVideoToolbox.taskManager
                 this.reportCount = 0;
                 this.log.Clear();
             };
-            
+
+            // 视频编码前更新UI(显示视频总帧数)
+            InnerMethodDelagate DispVideoFrames = delegate()
+            {
+                // MediaInfo读取视频帧数
+                MediaInfo MI = new MediaInfo();
+                string duration;
+                string frameRate;
+                string frames;
+                MI.Open(t.getFP());
+                duration = MI.Get(StreamKind.Video, 0, "Duration");
+                double totalTime = Double.Parse(duration) / 1000.0;
+                frameRate = MI.Get(StreamKind.Video, 0, "FrameRate");
+                frames = ((int)(totalTime * Double.Parse(frameRate))).ToString();
+
+                if (!String.IsNullOrWhiteSpace(frames))
+                {
+                    this.rsForm.setTime("0/" + frames);
+                }
+            };
+
             InnerMethodDelagate VideoEncode = delegate()
             {
                 // 视频编码                                             
                 this.encoding = true;
                 this.rsForm.setPercent("0.0");
-                             
+                DispVideoFrames();
+          
                 cmd = c.cmdCodeGenerate(VIDEOENCODE);
                 process.StandardInput.WriteLine(cmd);
                
@@ -343,7 +365,8 @@ namespace ExpertVideoToolbox.taskManager
             {
                 // muxer
                 this.muxing = true;
-                this.rsForm.SetTaskStepsLabel(false, 3, 3, MUXER);
+                int stepIdx = type == ONLYVIDEO ? 2 : 3;
+                this.rsForm.SetTaskStepsLabel(false, stepIdx, stepIdx, MUXER);
 
                 cmd = c.cmdCodeGenerate(MUXER);
                 process.StandardInput.WriteLine(cmd);
@@ -436,7 +459,7 @@ namespace ExpertVideoToolbox.taskManager
             {
                 case ONLYVIDEO:
 
-                    this.rsForm.SetTaskStepsLabel(false, 1, 1, VIDEOENCODE);
+                    this.rsForm.SetTaskStepsLabel(false, 1, 2, VIDEOENCODE);
 
                     VideoEncode();
 
@@ -765,43 +788,78 @@ namespace ExpertVideoToolbox.taskManager
                     }
                     else  // 编码未结束更新进度
                     {
-                        if (!o.Contains("indexing input file") && !o.Contains("[info]"))
+                        if (!o.Contains("[info]") && !o.Contains("q=-0.0 size="))
                         {
-                            // o 的格式 = [xx.x%] 已完成帧数/总帧数, ...
-                            int endIndex = o.IndexOf("%]");
-                            int startIndex = o.IndexOf("[");
-                            // 进度 xx.x 最多4位字符，间隔不应大于4 (index之间差值不得大于5)
-                            if (startIndex != -1 && endIndex != -1 && endIndex - startIndex < 6 && endIndex - startIndex > 0)
+                            // o 的格式 = xx frames: xx.xx fps, xxxx kb/s
+                            // 目前只需要读取已编码帧数
+
+                            //int endIndex = o.IndexOf("frames:");
+                            //int startIndex = o.IndexOf("[");
+                            //// 进度 xx.x 最多4位字符，间隔不应大于4 (index之间差值不得大于5)
+                            //if (startIndex != -1 && endIndex != -1 && endIndex - startIndex < 6 && endIndex - startIndex > 0)
+                            //{
+                            //    string progress = o.Substring(startIndex + 1, endIndex - startIndex - 1);  // 第二个参数是子串的长度
+                            //    this.rsForm.setPercent(progress);
+                            //    if (Convert.ToDouble(progress) >= 99.9)
+                            //    {
+                            //        miniLog += o + Environment.NewLine;
+                            //    }
+                            //}
+
+                            int kbpsStartIndex = o.IndexOf("fps, ") + 5;
+                            int kbpsEndIndex = o.IndexOf("kb/s") + 4;
+
+                            if (kbpsStartIndex != -1 && kbpsEndIndex != -1 && kbpsEndIndex - kbpsStartIndex > 6 && kbpsEndIndex - kbpsStartIndex < 14)
                             {
-                                string progress = o.Substring(startIndex + 1, endIndex - startIndex - 1);  // 第二个参数是子串的长度
-                                this.rsForm.setPercent(progress);
-                                if (Convert.ToDouble(progress) >= 99.9)
+                                string estKbps = o.Substring(kbpsStartIndex, kbpsEndIndex - kbpsStartIndex);
+                                this.rsForm.setEstKbps(estKbps);
+                            }
+
+                            int checkIndex = this.reportCount % (checkPattern + checkPattern);
+                            checkTime[checkIndex] = System.Environment.TickCount;
+
+                            // 从UI获取视频总帧数
+                            string lastCurrentTimeText = this.rsForm.getCurrentTimeText();
+                            int totalTimeStartIndex = lastCurrentTimeText.IndexOf("/") + 1;
+                            int totalTimeLength = lastCurrentTimeText.Length - totalTimeStartIndex;
+                            string totalFrames = lastCurrentTimeText.Substring(totalTimeStartIndex, totalTimeLength);
+
+                            // 从cmd中读取已经编码的帧数
+                            int framesIndex = o.IndexOf("frames:");
+
+                            string encodedFrames = "";
+
+                            // 帧数小于7位数
+                            if (framesIndex != -1 && framesIndex <= 8)
+                            {
+                                string frames = "";
+                                try
+                                {
+                                    frames = o.Substring(0, framesIndex - 1);
+                                }
+                                catch (Exception e)
+                                {
+                                    saveLog2File();
+                                }
+                                // endIndex = -1
+                                this.rsForm.setTime(frames + "/" + totalFrames);
+
+                                //string[] splitTemp = frames.Split(new char[] { '/' });
+                                encodedFrames = frames;
+                                //totalFrames = splitTemp[1];
+
+                                checkFrame[checkIndex] = Convert.ToInt32(encodedFrames);
+
+                                double percent = (double)(checkFrame[checkIndex]) / (Double.Parse(totalFrames)) * 100.0;
+
+                                this.rsForm.setPercent(percent.ToString());
+
+                                if (percent >= 99.9)
                                 {
                                     miniLog += o + Environment.NewLine;
                                 }
                             }
 
-                            int checkIndex = this.reportCount % (checkPattern * 2);
-                            checkTime[checkIndex] = System.Environment.TickCount;
-
-                            // 从cmd中读取已经编码的帧数
-                            int framesIndex = o.IndexOf(" frames");
-
-                            string encodedFrames = "";
-                            string totalFrames = "";
-
-                            if (framesIndex != -1)
-                            {
-                                // frames 格式： xxx/xxxxx (a/b, a的位数小于等于b的位数)
-                                string frames = o.Substring(endIndex + 3, framesIndex - endIndex - 3);
-                                this.rsForm.setTime(frames);
-
-                                string[] splitTemp = frames.Split(new char[] { '/' });
-                                encodedFrames = splitTemp[0];
-                                totalFrames = splitTemp[1];
-
-                                checkFrame[checkIndex] = Convert.ToInt32(encodedFrames);
-                            }
                             if (this.reportCount >= checkPattern)
                             {
                                 // 定义一个内部（匿名）方法
@@ -816,7 +874,7 @@ namespace ExpertVideoToolbox.taskManager
                                     // 计算优化后的ETA
                                     double avgFps = NonZeroAverage(this.fps);
                                     double eta = (double)(Convert.ToInt32(totalFrames) - checkFrame[checkIndex]) / avgFps / 60.0;
-                                 
+
                                     double i = Math.Floor(eta);  // 去除小数部分
                                     double d = eta - i;
 
@@ -866,9 +924,9 @@ namespace ExpertVideoToolbox.taskManager
                         }
                         else
                         {
-                            miniLog += o + Environment.NewLine;
-                            this.rsForm.setPercent("0.0");
-                            this.rsForm.setTime("索引中");
+                            //miniLog += o + Environment.NewLine;
+                            //this.rsForm.setPercent("0.0");
+                            //this.rsForm.setTime("索引中");
                         }
                     }
                 }

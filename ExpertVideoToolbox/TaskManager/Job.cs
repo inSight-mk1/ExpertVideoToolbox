@@ -291,14 +291,21 @@ namespace ExpertVideoToolbox.taskManager
                 string frames;
                 MI.Open(t.getFP());
                 duration = MI.Get(StreamKind.Video, 0, "Duration");
-                double totalTime = Double.Parse(duration) / 1000.0;
-                frameRate = MI.Get(StreamKind.Video, 0, "FrameRate");
-                frames = ((int)(totalTime * Double.Parse(frameRate))).ToString();
-
-                if (!String.IsNullOrWhiteSpace(frames))
+                try
                 {
-                    this.rsForm.setTime("0/" + frames);
+                    double totalTime = Double.Parse(duration) / 1000.0;
+                    frameRate = MI.Get(StreamKind.Video, 0, "FrameRate");
+                    frames = ((int)(totalTime * Double.Parse(frameRate))).ToString();
+
+                    if (!String.IsNullOrWhiteSpace(frames))
+                    {
+                        this.rsForm.setTime("0/" + frames);
+                    }
                 }
+                catch (Exception e)
+                {
+                    //saveLog2File();
+                }         
             };
 
             InnerMethodDelagate VideoEncode = delegate()
@@ -850,14 +857,22 @@ namespace ExpertVideoToolbox.taskManager
 
                                 checkFrame[checkIndex] = Convert.ToInt32(encodedFrames);
 
-                                double percent = (double)(checkFrame[checkIndex]) / (Double.Parse(totalFrames)) * 100.0;
-
-                                this.rsForm.setPercent(percent.ToString());
-
-                                if (percent >= 99.9)
+                                try
                                 {
-                                    miniLog += o + Environment.NewLine;
+                                    double percent = (double)(checkFrame[checkIndex]) / (Double.Parse(totalFrames)) * 100.0;
+
+                                    this.rsForm.setPercent(percent.ToString());
+
+                                    if (percent >= 99.9)
+                                    {
+                                        miniLog += o + Environment.NewLine;
+                                    }
                                 }
+                                catch (Exception e)
+                                {
+                                    //saveLog2File();
+                                }
+                                
                             }
 
                             if (this.reportCount >= checkPattern)

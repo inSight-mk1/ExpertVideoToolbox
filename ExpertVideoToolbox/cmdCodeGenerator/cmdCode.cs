@@ -20,6 +20,10 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
         const int ONLYVIDEO = 0;
         const int SUPPRESSAUDIO = 1;
         const int COPYAUDIO = 2;
+
+        const int NORMAL = 0;
+        const int AVS = 1;
+        const int VPY = 2;
         
         private string filePath;
         private taskSetting ts;
@@ -83,7 +87,7 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
             }
         }
 
-        public string cmdCodeGenerate(int mode)
+        public string cmdCodeGenerate(int mode, int vmode = 0)
         {
             string fp = this.filePath;
 
@@ -93,6 +97,7 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
             string mp4BoxPath = System.Windows.Forms.Application.StartupPath + "\\tools\\mp4Box\\MP4Box.exe";
             //string lsmashRemuxerPath = System.Windows.Forms.Application.StartupPath + "\\tools\\L-Smash\\remuxer.exe";
             string mkvmergePath = System.Windows.Forms.Application.StartupPath + "\\tools\\mkvmerge\\mkvmerge.exe";
+            string avsPath = System.Windows.Forms.Application.StartupPath + "\\tools\\avs\\avs4x265.exe";
         
             string code = "";
 
@@ -109,18 +114,28 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
             string audioTempPath = this.outputFolderPath + getPureFileName(fp) + "_audioTemp." + this.outputAudioFormat;
 
             switch (mode)
-            {               
+            {                        
                 case VIDEOENCODE:      
-                    //code = "\"" + x26xPath + "\"" + " " + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " " + "\"" + fp + "\"";
-                    
-                    // Example: "C:\Program Files (x86)\MarukoToolbox\tools\ffmpeg.exe" -i "C:\Users\fdws\Desktop\Trans\2016-09-28-1537-10.flv" 
-                    // -strict -1 -f yuv4mpegpipe -an -   | "C:\Users\fdws\Downloads\x265-master\build\vc12-x86_64\Release\x265-10bit.exe" 
-                    // --y4m  -o "C:\Users\fdws\Desktop\Trans\Test_vtemp.hevc" -
-                    
-                    string y4m = ts.encoder == "x265-10bit.exe" ? " --y4m " : " --demuxer y4m ";
-                    code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -strict -1 -f yuv4mpegpipe -an -   | "
-                        + "\"" + x26xPath + "\"" + y4m + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " -";
+                    switch (vmode)
+                    {
+                        case NORMAL:
+                            string y4m = ts.encoder == "x265-10bit.exe" ? " --y4m " : " --demuxer y4m ";
+                            code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -strict -1 -f yuv4mpegpipe -an -   | "
+                                 + "\"" + x26xPath + "\"" + y4m + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\"" + " -";
+                            break;
+                        case AVS:
+                            // Example:
+                            // "C:\Users\fdws\Downloads\avs4x265.exe" -L 
+                            // "C:\Users\fdws\Desktop\Trans\EVT_alpha\tools\x26x\x264_64-10bit.exe" 
+                            // --crf 24.5 -o "C:\Users\fdws\Desktop\Trans\01_batch.mp4" "C:\Users\fdws\Desktop\Trans\01.avs" 
 
+                            code = "\"" + avsPath + "\"" + " -L " + "\"" + x26xPath + "\" " + ts.encoderSetting + " -o " + "\"" + videoTempPath + "\""
+                                + " \"" + fp + "\"";
+                            break;
+                        default:
+                            break;
+                    }
+                                    
                     break;
                 case AUDIOCOPY:
                     code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -vn -sn -async 1 -c:a copy -y -map 0:a:0 " + "\"" + audioTempPath + "\"";                    
@@ -299,6 +314,13 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
                 dest += "\\";
             }
             return dest;
+        }
+
+        private string getFileExtName(string originFp)
+        {
+            string[] s = originFp.Split(new char[] { '.' });
+            int length = s.Length;
+            return s[length - 1];
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using MediaInfoLib;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,8 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
         private string outputFolderPath;
         private string outputAudioFormat;
 
+        private string avsVideoPath;
+
         public cmdCode(string fp, taskSetting t, string ofp)
         {
             this.filePath = fp;
@@ -49,47 +52,127 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
                 return ONLYVIDEO;
             } else if (String.Equals(this.ts.audioEncoder, "复制音频流"))
             {
-                MediaInfo MI = new MediaInfo();
-                string duration;
-                MI.Open(this.filePath);
-                duration = MI.Get(StreamKind.Audio, 0, 69);
-                this.outputAudioFormat = MI.Get(StreamKind.Audio, 0, "Format");
-                if (String.IsNullOrWhiteSpace(duration))
+                // 判断是否为avs文件
+
+                string ext = this.getFileExtName(this.filePath);
+                if (String.Equals(ext, "avs", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    return ONLYVIDEO;
-                } else
-                {
-                    if (CheckBoxCompatibility(this.outputAudioFormat, this.ts.outputFormat))
+                    string[] avsLines = File.ReadAllLines(this.filePath);
+                    for (int i = 0; i < avsLines.Length; i++)
                     {
-                        return COPYAUDIO;
+                        int startIdx = avsLines[i].IndexOf("Source(\"");
+                        int endIdx;
+                        if (startIdx != -1)
+                        {
+                            endIdx = avsLines[i].IndexOf("\")");
+                            startIdx += 8;
+                            this.avsVideoPath = avsLines[i].Substring(startIdx, endIdx - startIdx);
+                            break;
+                        }
+                    }
+                    MediaInfo MI = new MediaInfo();
+                    string duration;
+                    MI.Open(this.avsVideoPath);
+                    duration = MI.Get(StreamKind.Audio, 0, 69);
+                    this.outputAudioFormat = MI.Get(StreamKind.Audio, 0, "Format");
+                    if (String.IsNullOrWhiteSpace(duration))
+                    {
+                        return ONLYVIDEO;
+                    }
+                    else
+                    {
+                        if (CheckBoxCompatibility(this.outputAudioFormat, this.ts.outputFormat))
+                        {
+                            return COPYAUDIO;
+                        }
+                        else
+                        {
+                            this.outputAudioFormat = "aac";
+                            return SUPPRESSAUDIO;
+                        }
+                    }
+                }
+                else
+                {
+                    MediaInfo MI = new MediaInfo();
+                    string duration;
+                    MI.Open(this.filePath);
+                    duration = MI.Get(StreamKind.Audio, 0, 69);
+                    this.outputAudioFormat = MI.Get(StreamKind.Audio, 0, "Format");
+                    if (String.IsNullOrWhiteSpace(duration))
+                    {
+                        return ONLYVIDEO;
+                    }
+                    else
+                    {
+                        if (CheckBoxCompatibility(this.outputAudioFormat, this.ts.outputFormat))
+                        {
+                            return COPYAUDIO;
+                        }
+                        else
+                        {
+                            this.outputAudioFormat = "aac";
+                            return SUPPRESSAUDIO;
+                        }
+                    } 
+                }                           
+            } else
+            {
+                // 判断是否为avs文件
+
+                string ext = this.getFileExtName(this.filePath);
+                if (String.Equals(ext, "avs", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    string[] avsLines = File.ReadAllLines(this.filePath);
+                    for (int i = 0; i < avsLines.Length; i++)
+                    {
+                        int startIdx = avsLines[i].IndexOf("Source(\"");
+                        int endIdx;
+                        if (startIdx != -1)
+                        {
+                            endIdx = avsLines[i].IndexOf("\")");
+                            startIdx += 8;
+                            this.avsVideoPath = avsLines[i].Substring(startIdx, endIdx - startIdx);
+                            break;
+                        }
+                    }
+                    MediaInfo MI = new MediaInfo();
+                    string duration;
+                    MI.Open(this.avsVideoPath);
+                    duration = MI.Get(StreamKind.Audio, 0, 69);
+                    if (String.IsNullOrWhiteSpace(duration))
+                    {
+                        return ONLYVIDEO;
                     }
                     else
                     {
                         this.outputAudioFormat = "aac";
                         return SUPPRESSAUDIO;
-                    }                    
-                }                
-            } else
-            {
-                MediaInfo MI = new MediaInfo();
-                string duration;
-                MI.Open(this.filePath);
-                duration = MI.Get(StreamKind.Audio, 0, 69);
-                if (String.IsNullOrWhiteSpace(duration))
-                {
-                    return ONLYVIDEO;
+                    }
                 }
                 else
                 {
-                    this.outputAudioFormat = "aac";
-                    return SUPPRESSAUDIO;
-                } 
+                    MediaInfo MI = new MediaInfo();
+                    string duration;
+                    MI.Open(this.filePath);
+                    duration = MI.Get(StreamKind.Audio, 0, 69);
+                    if (String.IsNullOrWhiteSpace(duration))
+                    {
+                        return ONLYVIDEO;
+                    }
+                    else
+                    {
+                        this.outputAudioFormat = "aac";
+                        return SUPPRESSAUDIO;
+                    } 
+                }
             }
         }
 
         public string cmdCodeGenerate(int mode, int vmode = 0)
         {
             string fp = this.filePath;
+            string audioSource = String.IsNullOrEmpty(this.avsVideoPath) ? fp : this.avsVideoPath;
 
             string qaacPath = System.Windows.Forms.Application.StartupPath + "\\tools\\qaac\\qaac.exe";
             string ffmpegPath = System.Windows.Forms.Application.StartupPath + "\\tools\\ffmpeg\\ffmpeg.exe";
@@ -138,7 +221,8 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
                                     
                     break;
                 case AUDIOCOPY:
-                    code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -vn -sn -async 1 -c:a copy -y -map 0:a:0 " + "\"" + audioTempPath + "\"";                    
+                    code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + audioSource 
+                        + "\"" + " -vn -sn -async 1 -c:a copy -y -map 0:a:0 " + "\"" + audioTempPath + "\"";                    
                     break;
                 case MUXER:
                     if (String.Equals(ts.outputFormat, "mp4", StringComparison.CurrentCultureIgnoreCase))
@@ -183,7 +267,7 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
                     if (String.Equals(this.ts.audioEncoder, "qaac", StringComparison.CurrentCultureIgnoreCase)
                         || String.Equals(this.ts.audioEncoder, "复制音频流", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + fp + "\"" + " -vn -sn -v 0 -async 1 -c:a pcm_s16le -f wav pipe:|" + "\"" + qaacPath + "\"" + " - --ignorelength";
+                        code = "\"" + ffmpegPath + "\"" + " -i " + "\"" + audioSource + "\"" + " -vn -sn -v 0 -async 1 -c:a pcm_s16le -f wav pipe:|" + "\"" + qaacPath + "\"" + " - --ignorelength";
                         if (string.Equals(this.ts.audioProfile, "HE-AAC"))
                         {
                             code += " --he";

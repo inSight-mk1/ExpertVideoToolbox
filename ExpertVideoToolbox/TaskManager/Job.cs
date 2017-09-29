@@ -855,15 +855,15 @@ namespace ExpertVideoToolbox.taskManager
                             checkTime[checkIndex] = System.Environment.TickCount;
                             string encodedFrames = "";
                             string totalFrames = "";
+                            int kbpsStartIndex, kbpsEndIndex;
                             
                             switch (this.videoType)
                             {
                                 case NORMAL:
                                     // o 的格式 = xx frames: xx.xx fps, xxxx kb/s
-                                    // 目前只需要读取已编码帧数
                                     
-                                    int kbpsStartIndex = o.IndexOf("fps, ") + 5;
-                                    int kbpsEndIndex = o.IndexOf("kb/s") + 4;
+                                    kbpsStartIndex = o.IndexOf("fps, ") + 5;
+                                    kbpsEndIndex = o.IndexOf("kb/s") + 4;
 
                                     if (kbpsStartIndex != -1 && kbpsEndIndex != -1 && kbpsEndIndex - kbpsStartIndex > 6 && kbpsEndIndex - kbpsStartIndex < 14)
                                     {
@@ -900,6 +900,8 @@ namespace ExpertVideoToolbox.taskManager
                                         //totalFrames = splitTemp[1];
 
                                         checkFrame[checkIndex] = Convert.ToInt32(encodedFrames);
+
+                                        this.reportCount++;
 
                                         try
                                         {
@@ -950,7 +952,19 @@ namespace ExpertVideoToolbox.taskManager
                                         totalFrames = splitTemp[1];
 
                                         checkFrame[checkIndex] = Convert.ToInt32(encodedFrames);
+
+                                        this.reportCount++;
                                     }
+
+                                    kbpsStartIndex = o.IndexOf("fps, ") + 5;
+                                    kbpsEndIndex = o.IndexOf("kb/s") + 4;
+
+                                    if (kbpsStartIndex != -1 && kbpsEndIndex != -1 && kbpsEndIndex - kbpsStartIndex > 6 && kbpsEndIndex - kbpsStartIndex < 14)
+                                    {
+                                        string estKbps = o.Substring(kbpsStartIndex, kbpsEndIndex - kbpsStartIndex);
+                                        this.rsForm.setEstKbps(estKbps);
+                                    }
+
                                     break;
                                 
                                 default:
@@ -1016,8 +1030,6 @@ namespace ExpertVideoToolbox.taskManager
                                 this.rsForm.setEta("正在计算...");
                                 this.rsForm.setFps("正在统计...");
                             }
-
-                            this.reportCount++;
                         }
                         else
                         {

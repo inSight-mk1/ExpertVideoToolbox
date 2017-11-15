@@ -277,8 +277,7 @@ namespace ExpertVideoToolbox
         private void encodeSettingCB_SelectedIndexChanged(object sender, EventArgs e)
         {
             foreach (taskSetting ts in settings)
-            {
-                
+            {             
                 if (ts != null && String.Equals(this.encodeSettingCB.Text, ts.name))
                 {
                     // Items集合中有此项值才能通过这种方法添加（DropList模式）
@@ -484,8 +483,8 @@ namespace ExpertVideoToolbox
             ComboBox comboBox = (ComboBox)sender;
             if (string.Equals(comboBox.Text, "HE-AAC"))
             {
-                this.bitrateOrQualityCB.Enabled = true;
-                this.codecModeCB.Enabled = true;
+                //this.bitrateOrQualityCB.Enabled = true;
+                //this.codecModeCB.Enabled = true;
                 this.addCodecModeItems();
                 this.codecModeCB.SelectedIndex = 0;
                 this.brORqLabel.Text = "码率";
@@ -494,8 +493,8 @@ namespace ExpertVideoToolbox
             }
             else if (string.Equals(comboBox.Text, "LC-AAC"))
             {
-                this.bitrateOrQualityCB.Enabled = true;
-                this.codecModeCB.Enabled = true;
+                //this.bitrateOrQualityCB.Enabled = true;
+                //this.codecModeCB.Enabled = true;
                 this.addCodecModeItems();
                 this.codecModeCB.SelectedIndex = 3;
                 this.brORqLabel.Text = "质量";

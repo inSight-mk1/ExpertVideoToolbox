@@ -366,12 +366,30 @@ namespace ExpertVideoToolbox.taskManager
                         break;
                     case AVS:
                         Process avsP = GetSubTaskProcess("avs4x265.exe");
+                        int avsId = avsP.Id;
                         if (avsP != null)
                         {
                             bool hasFound = false;
-                            for (int i = 0; i < 60; i++)
+
+                            // 等待视频编码进程启动，最长等待1小时
+                            for (int i = 0; i < 7200; i++)
                             {
-                                p = GetSubTaskProcess(ts.encoder, avsP.Id);
+                                // 确认avs进程仍在运行                          
+                                try
+                                {
+                                    Process.GetProcessById(avsId);
+                                }
+                                catch (Exception e)
+                                {
+                                    if (this.encoding == true || ConfirmFailed())
+                                    {
+                                        afterFailed();
+                                    }
+                                    return;
+                                }
+
+                                // 每隔500ms寻找视频编码进程
+                                p = GetSubTaskProcess(ts.encoder, avsId);                              
                                 if (p != null)
                                 {
                                     this.subTaskPID = p.Id;
@@ -380,7 +398,7 @@ namespace ExpertVideoToolbox.taskManager
                                 }
                                 else
                                 {
-                                    Thread.Sleep(1000);
+                                    Thread.Sleep(500);
                                 }
                             }
                             
@@ -465,7 +483,11 @@ namespace ExpertVideoToolbox.taskManager
                     }
                     catch (Exception e)
                     {
-                        afterFailed();
+                        Thread.Sleep(1000);
+                        if (this.muxing == true)
+                        {
+                            afterFailed();
+                        }
                         return;
                     }
                     
@@ -498,7 +520,7 @@ namespace ExpertVideoToolbox.taskManager
                 // MediaInfo读取音频时长
                 MediaInfo MI = new MediaInfo();
                 string duration;
-                MI.Open(t.getFP());
+                MI.Open(c.getAudioSource());
                 duration = MI.Get(StreamKind.Audio, 0, 69);
 
                 if (!String.IsNullOrWhiteSpace(duration))
@@ -566,7 +588,11 @@ namespace ExpertVideoToolbox.taskManager
                         }
                         catch (Exception e)
                         {
-                            afterFailed();
+                            Thread.Sleep(1000);
+                            if (this.audioProcessing == true)
+                            {
+                                afterFailed();
+                            }
                             return;
                         }
 
@@ -612,8 +638,8 @@ namespace ExpertVideoToolbox.taskManager
                     checkNum = 0;
 
                     Thread.Sleep(beforeProcessCheckTime);
-                
-                    Process p2 = GetSubTaskProcess("ffmpeg");
+
+                    Process p2 = GetSubTaskProcess(ts.audioEncoder);
                     if (p2 != null)
                     {
                         this.subTaskPID = p2.Id;
@@ -631,7 +657,11 @@ namespace ExpertVideoToolbox.taskManager
                         }
                         catch (Exception e)
                         {
-                            afterFailed();
+                            Thread.Sleep(1000);
+                            if (this.audioProcessing == true)
+                            {
+                                afterFailed();
+                            }
                             return;
                         }
 
@@ -703,9 +733,21 @@ namespace ExpertVideoToolbox.taskManager
                     {
                         string[] splitTemp = totalTime.Split(new char[] { ':' });
 
-                        string HH = splitTemp[0];
-                        string MM = splitTemp[1];
-                        string SSMMM = splitTemp[2];
+                        string HH = "0";
+                        string MM = "0";
+                        string SSMMM = "0";
+                        
+                        if (splitTemp.Length == 3)
+                        {
+                            HH = splitTemp[0];
+                            MM = splitTemp[1];
+                            SSMMM = splitTemp[2];
+                        } else if (splitTemp.Length == 3)
+                        {
+                            HH = "00";
+                            MM = splitTemp[0];
+                            SSMMM = splitTemp[1];
+                        }
 
                         int hr = Convert.ToInt32(HH);
                         int min = Convert.ToInt32(MM);

@@ -169,6 +169,12 @@ namespace ExpertVideoToolbox.cmdCodeGenerator
             }
         }
 
+        public string getAudioSource()
+        {
+            string audioSource = String.IsNullOrEmpty(this.avsVideoPath) ? this.filePath : this.avsVideoPath;
+            return audioSource;
+        }
+
         public string cmdCodeGenerate(int mode, int vmode = 0)
         {
             string fp = this.filePath;

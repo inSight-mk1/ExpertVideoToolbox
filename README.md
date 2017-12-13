@@ -1,5 +1,5 @@
 # ExpertVideoToolbox
-A lightweight, versatile GUI of x264, x265. Nearly full input formats support, .mkv and .mp4 output support. Avs support will be added soon.
+A lightweight, versatile GUI of x264, x265. Nearly full input formats support, .mkv and .mp4 output support. Avs support has been added.
 
 = Mandatory Prerequisites =
 * NuGet packages: MediaInfoDotNet and Newtonsoft.Json
@@ -11,6 +11,3 @@ Includes ffmpeg.exe, mkvmerge.exe, qaac.exe (need some .dll files to run without
 * Full video conversion process (Audio and Video) in one step.
 * For expert, easy to modify x26x command lines parameters.
 * Low speed mode. Set CPU affinity to one quarter logcial processors. Users do not need to stop the video converting process when playing games or other tasks need CPU.   
-
-= Develop Plans = 
-* Support .avs input. April 2017.

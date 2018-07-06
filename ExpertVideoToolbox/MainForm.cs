@@ -176,10 +176,8 @@ namespace ExpertVideoToolbox
                             // Insert code to read the stream here.
                             string fp = openFileDialog1.FileName;
                             string setting = this.encodeSettingCB.Text;
-                            
-                            ListViewItem item = new ListViewItem(new string[] { fp, setting });
-                            this.fileListView.Items.Add(item);
-                      }
+                            addItem2FileListView(fp, setting);
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -210,8 +208,7 @@ namespace ExpertVideoToolbox
 
                         string setting = this.encodeSettingCB.Text;
 
-                        ListViewItem item = new ListViewItem(new string[] { fp, setting });
-                        this.fileListView.Items.Add(item);
+                        addItem2FileListView(fp, setting);
                     }
 
                 }

@@ -626,7 +626,18 @@ namespace ExpertVideoToolbox
                     {
                         if (frontTextLength <= 3) // 文本前部即将小于最小宽度，只能修建文本后部 
                         {
-                            visualfp = fp.Substring(0, frontTextLength) + ("").PadLeft(dotCount, '0').Replace("0", dot) + fp.Substring(++rearStartIndex, rearTextLength);
+// 已知问题：遇到超长字符串时，修剪完前部文本再修剪后部文本时，函数直接从这里跳出，没有异常，界面上也显示不了这个文件。
+// 准备先加异常处理看看。20180531 1320
+                            try
+                            {
+                                visualfp = fp.Substring(0, frontTextLength) + ("").PadLeft(dotCount, '0').Replace("0", dot) + fp.Substring(++rearStartIndex, rearTextLength);
+                            }
+                            catch (Exception e)
+                            {
+                                //MessageBox.Show(e.ToString());
+                                break;
+                            }
+                           
                         }
                         else // 否则修剪文本前部
                         {

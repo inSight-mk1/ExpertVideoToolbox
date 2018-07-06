@@ -232,8 +232,15 @@ namespace ExpertVideoToolbox.taskManager
                 this.finishedNum++;
                 this.rsForm.setStatusBarFilesCountLabel(this.finishedNum, this.num);
 
-                process.CancelErrorRead();
-                process.CancelOutputRead();
+                try
+                {
+                    process.CancelErrorRead();
+                    process.CancelOutputRead();
+                }
+                catch (Exception e)
+                {
+                    //saveLog2File();
+                }           
 
                 this.rsForm.setEta("");
                 this.rsForm.setFps("");
@@ -272,8 +279,15 @@ namespace ExpertVideoToolbox.taskManager
                 this.rsForm.setStatusBarFilesCountLabel(this.finishedNum, this.num);
                 this.rsForm.HideVideoEncoderSetting();
 
-                process.CancelErrorRead();
-                process.CancelOutputRead();
+                try
+                {
+                    process.CancelErrorRead();
+                    process.CancelOutputRead();
+                }
+                catch (Exception e)
+                {
+                    //saveLog2File();
+                }              
                 
                 Thread.Sleep(sleepTime * 1000);
 
@@ -332,10 +346,17 @@ namespace ExpertVideoToolbox.taskManager
     
                 cmd = c.cmdCodeGenerate(VIDEOENCODE, this.videoType);
                 process.StandardInput.WriteLine(cmd);
-               
-                process.BeginErrorReadLine();
-                process.BeginOutputReadLine();
 
+                try
+                {
+                    process.BeginErrorReadLine();
+                    process.BeginOutputReadLine();
+                }
+                catch (Exception e)
+                {
+                    //saveLog2File();
+                }        
+                
                 checkNum = 0;
                 this.reportCount = 0;
                 int cpx2 = this.checkPattern + this.checkPattern;
@@ -435,8 +456,16 @@ namespace ExpertVideoToolbox.taskManager
                    
                     Thread.Sleep(processCheckInterval);
                 }
-                process.CancelErrorRead();
-                process.CancelOutputRead();
+                try
+                {
+                    process.CancelErrorRead();
+                    process.CancelOutputRead();
+                }
+                catch (Exception e)
+                {
+                    //saveLog2File();
+                } 
+                
                 this.rsForm.HideVideoEncoderSetting();
             };
 
@@ -449,8 +478,17 @@ namespace ExpertVideoToolbox.taskManager
 
                 cmd = c.cmdCodeGenerate(MUXER);
                 process.StandardInput.WriteLine(cmd);
-                process.BeginErrorReadLine();
-                process.BeginOutputReadLine();
+                
+                try
+                {
+                    process.BeginErrorReadLine();
+                    process.BeginOutputReadLine();
+                }
+                catch (Exception e)
+                {
+                    //saveLog2File();
+                } 
+
                 checkNum = 0;
 
                 Thread.Sleep(beforeProcessCheckTime);  // 有些超短的视频（1-2M），如果不加这句就会直接判定为任务已失败，疑似原因：没等判断完进程就已经结束
@@ -498,6 +536,7 @@ namespace ExpertVideoToolbox.taskManager
                     //    return;
                     //}
                 }
+
                 afterSuccess();
 
                 string tempVideoFp = c.cmdCodeGenerate(DELETEVIDEOTEMP);
